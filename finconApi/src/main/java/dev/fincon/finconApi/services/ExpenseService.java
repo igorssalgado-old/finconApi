@@ -27,8 +27,8 @@ public class ExpenseService {
         return expenseRepository.save(expenseModel);
     }
 
-    public void delete() {
-
+    public void delete(UUID id) {
+        expenseRepository.deleteById(id);
     }
 
     public ExpenseModel update() {
