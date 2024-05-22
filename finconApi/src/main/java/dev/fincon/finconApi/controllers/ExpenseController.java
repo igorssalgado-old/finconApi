@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.fincon.finconApi.entities.ExpenseModel;
+import dev.fincon.finconApi.exceptions.ExpenseNotFoundException;
 import dev.fincon.finconApi.services.ExpenseService;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -48,7 +49,7 @@ public class ExpenseController {
         ExpenseModel foundIt = expenseService.findById(id);
 
         if (foundIt == null) {
-            System.out.println("falhou");
+            throw new ExpenseNotFoundException();
         }
 
         foundIt.add(linkTo(methodOn(ExpenseController.class).findAll()).withRel("All Expenses:"));
@@ -67,7 +68,7 @@ public class ExpenseController {
         ExpenseModel foundIt = expenseService.findById(id);
 
         if (foundIt == null) {
-            System.out.println("falhou");
+            throw new ExpenseNotFoundException();
         }
 
         foundIt.add(linkTo(methodOn(ExpenseController.class).findAll()).withRel("All Expenses:"));
@@ -76,6 +77,13 @@ public class ExpenseController {
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable(name = "id") UUID id) throws Exception {
+
+        ExpenseModel foundIt = expenseService.findById(id);
+
+        if (foundIt == null) {
+            throw new ExpenseNotFoundException();
+        }
+
         expenseService.delete(id);
     }
 
