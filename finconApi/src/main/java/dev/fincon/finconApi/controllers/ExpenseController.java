@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,7 +51,7 @@ public class ExpenseController {
             System.out.println("falhou");
         }
 
-        foundIt.add(linkTo(methodOn(ExpenseController.class).findById(id)).withRel("Producting Listing:"));
+        foundIt.add(linkTo(methodOn(ExpenseController.class).findAll()).withRel("All Expenses:"));
         return ResponseEntity.status(HttpStatus.OK).body(foundIt);
     }
 
@@ -59,8 +60,23 @@ public class ExpenseController {
         return ResponseEntity.status(HttpStatus.OK).body(expenseService.createExpense(expenseModel));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<ExpenseModel> update(@PathVariable(name = "id") UUID id,
+            @RequestBody ExpenseModel expenseModel) throws Exception {
+
+        ExpenseModel foundIt = expenseService.findById(id);
+
+        if (foundIt == null) {
+            System.out.println("falhou");
+        }
+
+        foundIt.add(linkTo(methodOn(ExpenseController.class).findAll()).withRel("All Expenses:"));
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.update(id, expenseModel));
+    }
+
     @DeleteMapping("{id}")
     public void delete(@PathVariable(name = "id") UUID id) throws Exception {
         expenseService.delete(id);
     }
+
 }

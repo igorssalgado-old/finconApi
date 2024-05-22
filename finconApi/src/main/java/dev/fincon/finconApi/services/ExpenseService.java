@@ -31,7 +31,10 @@ public class ExpenseService {
         expenseRepository.deleteById(id);
     }
 
-    public ExpenseModel update() {
-        return null;
+    public ExpenseModel update(UUID id, ExpenseModel expenseModel) {
+        ExpenseModel updatedModel = new ExpenseModel();
+        updatedModel = expenseModel;
+        updatedModel.setId(id);
+        return expenseRepository.save(updatedModel);
     }
 }
